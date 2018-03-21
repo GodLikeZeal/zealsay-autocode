@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeal.shiyulin.manage.autocode.dao.AutoCodeDao">
+    <!--获取所有表信息-->
+    <select id="getAllTable" parameterType="String" resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+SELECT
+	d.*
+FROM
+	(
+		SELECT
+			t.TABLE_NAME AS NAME,
+			NULL AS comments,
+			REPLACE (t.TABLE_NAME, '_', '') AS CLASS_NAME,
+			t.table_name,
+		  CASE WHEN EXISTS(SELECT id FROM gen_table WHERE name = t.TABLE_NAME) THEN '已生成' ELSE '未生成' END AS zt
+		FROM
+			INFORMATION_SCHEMA. TABLES t
+		WHERE
+			UPPER(TABLE_SCHEMA) = UPPER(#{value})
+	) d
+ORDER BY
+	NAME
+
+   </select>
+    <!--获取指定表的所有字段信息-->
+    <select id="getAllColumns" parameterType="java.util.Map" resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTableColumn">
+
+            SELECT
+                null id,
+                null gen_table_id,
+                t.COLUMN_NAME AS name,
+                t.COLUMN_COMMENT AS comments,
+                t.ORDINAL_POSITION AS sort,
+                getjdbctype(t.DATA_TYPE,1) as jdbc_type,
+                getjdbctype(t.DATA_TYPE,0) as java_type,
+                t.COLUMN_NAME as java_field,
+                case when t.COLUMN_KEY='PRI' then '1' else '0' end IS_PK
+            FROM information_schema.columns t
+            WHERE  upper(t.table_name)= upper(#{tablename}) AND UPPER(t.TABLE_SCHEMA) = UPPER(#{dataBaseName})
+    </select>
+    <!--查询mysql数据库中存在的数据库名称-->
+    <select id="getDatabaseTableName" resultType="String">
+        SHOW DATABASES
+    </select>
+    <!--获取配置的表实现类信息-->
+    <select id="getTableClass" parameterType="java.util.Map"  resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+        SELECT
+        a.*
+        FROM gen_table a
+        <where>
+            <if test="id!=null">
+                and a.id = #{id}
+            </if>
+            <if test="name!=null">
+                and upper(a.name)=upper(#{name})
+            </if>
+        </where>
+    </select>
+    <select id="getAllTableClass"  resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+        SELECT
+        a.*
+        FROM gen_table a
+    </select>
+    <!--获取配置的字段实现类的信息-->
+    <select id="getColumnClass" resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTableColumn">
+        SELECT
+        a.*
+        FROM gen_table_column a
+        WHERE 1=1  AND upper(a.gen_table_id) = upper(#{genTable.id})
+        ORDER BY a.sort ASC
+    </select>
+
+    <select id="getAllGenTable" resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+      select  * from gen_Table order by name
+    </select>
+
+    <!--插入表信息-->
+    <insert id="insertTable" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTable" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO gen_table(
+			name,
+			comments,
+			class_name,
+			bz,create_by,create_date
+		) VALUES (
+			#{name},
+			#{comments},
+			#{className},
+			#{bz},#{createBy},current_timestamp()
+		)
+    </insert>
+    <!--更新表信息-->
+    <update id="updateTable" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTable" >
+        UPDATE  gen_table
+			SET id = #{id},
+			SET name = #{name},
+			SET comments = #{comments},
+			SET class_name = #{class_name},
+			SET bz = #{bz},
+			SET create_by = #{create_by},
+			SET create_date = #{create_date}
+    </update>
+    <!--插入字段信息-->
+    <insert id="insertColumn" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTableColumn">
+        INSERT INTO gen_table_column(
+        id,
+        gen_table_id,
+        name,
+        comments,
+        jdbc_type,
+        java_type,
+        java_field,
+        sort,
+        is_pk
+        ) VALUES (
+        #{id},
+        #{genTable.id},
+        #{name},
+        #{comments},
+        #{jdbcType},
+        #{javaType},
+        #{javaField},
+        #{sort},
+        #{isPk}
+        )
+    </insert>
+    <!--根新字段信息-->
+    <update id="updateColumn" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTableColumn">
+        UPDATE  gen_table_column
+        SET id = #{id},
+        SET gen_table_id = #{gen_table_id},
+        SET  name = #{name},
+        SET  comments = #{comments},
+        SET jdbc_type = #{jdbc_type},
+        SET java_type = #{java_type},
+        SET  java_field = #{java_field},
+        SET  sort = #{sort},
+        SET  is_pk = #{is_pk}
+    </update>
+    <!--根据gen_table的id查询在是否已生成-->
+    <select id="getNumById" parameterType="Integer" resultType="int">
+        SELECT  COUNT(id) FROM gen_table_column WHERE gen_table_id= #{id}
+    </select>
+    <!--根据表名称查询在是否已生成-->
+    <select id="getNumByName" parameterType="String" resultType="int">
+        SELECT  COUNT(id) FROM gen_table WHERE name= #{name}
+    </select>
+    <!--删除表信息-->
+    <delete id="deleteTable" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+        delete from gen_table where upper(name)=upper(#{name})
+    </delete>
+
+    <!--删除字段信息-->
+    <delete id="deleteColumn" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTableColumn">
+        delete from gen_table_column where gen_table_id=#{genTable.id}
+    </delete>
+    <delete id="deleteColumnByName">
+        delete from gen_table_column  where
+        exists(select 1 from gen_table   where id=gen_table_column.gen_table_id and upper(name)=upper(#{name}))
+    </delete>
+
+
+    <select id="findByClassPaginate" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTable"
+            resultType="com.zeal.shiyulin.manage.autocode.entity.XmlTable">
+        select * from(select t.*,rownum rn from(select * from
+        GEN_TABLE RES
+        order by ${order} ${sort} ) t where rownum &lt;= #{end}) where
+        rn &gt;= #{start}
+    </select>
+
+    <select id="findByClassPaginateCount" parameterType="com.zeal.shiyulin.manage.autocode.entity.XmlTable"
+            resultType="long">
+        select count(1) from
+        GEN_TABLE RES
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+       <name>mapper</name>
+       <filePath>src/main/resources/${mappingPackageName}/${moduleName}</filePath>
+       <fileName>${ClassName}_Batis.xml</fileName>
+       <content><![CDATA[
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.${moduleName}.dao.${ClassName}Dao">
+    <!--<cache type="com.zeal.shiyulin.common.RedisCache"/>-->
+    <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 只要在对应的mapper配置文件中加入<cache />标签即可-->
+	<!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+	 <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->
+	<!-- INSERT一条Article  -->
+	<!-- INSERT一条${ClassName}  -->
+     <#list table.columnList as c>
+     <#if c.isPk == "1" >
+	<insert id="insert" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity" keyProperty="${c.javaFieldId}" useGeneratedKeys="true">
+     </#if>
+	</#list>
+    	insert into ${table.name?lower_case}
+    	<trim prefix="(" suffix=")" suffixOverrides="," >
+	<#assign insertField>
+		<#list table.columnList as c>
+			<#if c.javaFieldId != "islike" >
+			${c.name},
+			</#if>
+		</#list>
+	</#assign>
+	${insertField}
+       </trim>
+       <trim prefix="values (" suffix=")" suffixOverrides="," >
+    <#assign insertJavaField>
+    	<#list table.columnList as c>
+    		<#if  c.javaFieldId != "islike"  >
+			${"#"}{${c.javaFieldId}},
+			</#if>
+    	</#list>
+    </#assign>
+    ${insertJavaField}
+    	</trim>
+	</insert>
+
+	<!-- ${ClassName} UPDATE -->
+	<update id="update" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+    	update ${table.name?lower_case}
+    	 <trim prefix="set" suffixOverrides=",">
+    <#assign updateField>
+    	<#list table.columnList as c>
+    		<#if  c.javaFieldId != "islike" && c.javaFieldId != "ishistory"  && c.javaFieldId != 'id'>
+			<if test="${c.javaFieldId}Changed==true">
+			  ${c.name}=${"#"}{${c.javaFieldId}},
+			</if>
+    		</#if>
+    	</#list>
+    </#assign>
+    ${updateField}
+    <#assign whereCondition>
+    	<#list table.columnList as c>
+    		<#if c.isPk == "1">
+${c.name} = ${"#"}{${c.javaFieldId}}
+    			<#break>
+    		</#if>
+    	</#list>
+    </#assign>
+            </trim>
+    	where ${whereCondition}
+    </update>
+
+	<!-- DELETE一条${ClassName}  -->
+	<delete id="delete" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+		delete from ${table.name?lower_case} t
+		<include refid="whereCause"></include>
+	</delete>
+    <delete id="deleteById" parameterType="java.lang.String">
+    <#assign whereCondition>
+    	<#list table.columnList as c>
+    		<#if c.isPk == "1">
+${c.name} = ${"#"}{${c.javaFieldId}}
+    			<#break>
+    		</#if>
+    	</#list>
+    </#assign>
+		delete from ${table.name?lower_case}
+		where ${whereCondition}
+	</delete>
+
+
+	<sql id="whereCause">
+		<where>
+	    	<#assign whereCondition>
+            <choose>
+                <when test="islike==1">
+      <#list table.columnList as c>
+          <#if c.name!="islike" >
+                  <if test="${c.javaFieldId} != null">
+                     and t.${c.name} LIKE  CONCAT('%',${"#"}{${c.javaFieldId}},'%')
+                  </if>
+          </#if>
+      </#list>
+                </when>
+                <otherwise>
+      <#list table.columnList as c>
+          <#if c.name!="islike" >
+                  <if test="${c.javaFieldId} != null">
+                      and t.${c.name} = ${"#"}{${c.javaFieldId}}
+                  </if>
+          </#if>
+      </#list>
+                </otherwise>
+            </choose>
+		    </#assign>
+${whereCondition}
+		</where>
+	</sql>
+
+    <!-- 根据ID来查找一条${ClassName} -->
+    <select id="findById" parameterType="java.lang.String"
+			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+		select * from ${table.name?lower_case}
+		<#assign whereCondition>
+    	<#list table.columnList as c>
+    		<#if c.isPk == "1">
+${c.name} = ${"#"}{${c.javaFieldId}}
+    			<#break>
+    		</#if>
+    	</#list>
+    </#assign>
+		where ${whereCondition}
+	</select>
+
+    <!-- 根据Class来查找${ClassName} -->
+	<select id="findByClass" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
+			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+		select * from ${table.name?lower_case} t
+		<include refid="whereCause"></include>
+	</select>
+
+<!-- 根据Class来分页查询查找${ClassName} -->
+	<select id="findByClassPaginate" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
+			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+		select * from ${table.name?lower_case} t
+		<include refid="whereCause"></include>
+		order by ${"$"}{order} ${"$"}{sort} limit  ${"#"}{start},${"#"}{size}
+	</select>
+
+<!-- 根据Class来分页查询查找${ClassName}的分页总数量 -->
+	<select id="findByClassPaginateCount" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
+			resultType="long">
+		select count(1) from ${table.name?lower_case} t
+		<include refid="whereCause"></include>
+	</select>
+
+
+
+</mapper>]]>
+       </content>
+</template>

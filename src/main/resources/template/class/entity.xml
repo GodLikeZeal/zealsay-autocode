@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+       <name>Model</name>
+       <filePath>src/main/java/${packageName}/${moduleName}/entity</filePath>
+       <fileName>${ClassName}Entity.java</fileName>
+       <content><![CDATA[
+/** 
+ * Copyright ® 2016-${currentYear} zeal  1332949188@qq.com.
+ * All right reserved. 
+ */
+package ${packageName}.${moduleName}.entity;
+
+<#list table.importList as i>
+import ${i};
+</#list>
+import com.fasterxml.jackson.annotation.JsonFormat;
+import ${packageCommonName}.structure.CommonEntity;
+import ${packageUtilsName}.DateUtils;
+import ${packageConstantsName}.global.AutoCodeConstants;
+import ${packageUtilsName}.CommonUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.math.BigDecimal;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+
+
+/**
+ * ${functionName}实体类接口
+ * 
+ * @author ${functionAuthor}
+ * @date ${functionVersion}
+ */
+public class ${ClassName}Entity extends CommonEntity<${ClassName}Entity> {
+	private static final long serialVersionUID = 1L;
+	protected int revision;
+	<#-- 生成字段属性 -->
+	//属性字段
+	<#list table.columnList?sort_by(["simpleJavaField"]) as c>
+	<#if c.comments??>@ApiModelProperty(value = "${c.comments}")</#if>
+	private ${c.simpleJavaType} ${c.simpleJavaField}; <#if c.comments??>// ${c.comments}</#if>
+	</#list>
+
+
+	<#-- 生成字段属性是否变化 -->
+	//属性字段是否变化
+	<#list table.columnList as c>
+	private Boolean ${c.simpleJavaField}Changed = false; <#if c.comments??>// ${c.comments}</#if>
+	</#list>
+
+
+	<#-- 构造方法 -->
+	/**
+	 * 无参构造函数
+	 */
+	public ${ClassName}Entity() {
+		super();
+	}
+
+	public ${ClassName}Entity(Map<String,String> allRequestParams)  throws Exception{
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");//用于时间格式化
+
+        if(CommonUtils.mapContainsKey(allRequestParams,"size")){
+            setSize(Integer.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"size")));  //每页显示数量
+        }
+        if(CommonUtils.mapContainsKey(allRequestParams,"start")){
+            setStart(Integer.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"start"))); //每页显示起始序号
+        }
+        if(CommonUtils.mapContainsKey(allRequestParams,"order")){
+            setOrder(String.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"order"))); //排序字段
+        }
+        if(CommonUtils.mapContainsKey(allRequestParams,"sort")){
+           setSort(String.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"sort"))); //排序方式，desc或asc
+        }
+
+		<#list table.columnList as c>
+		if (CommonUtils.mapContainsKey(allRequestParams,"${c.simpleJavaField}")) {
+			<#if c.javaType == "java.util.Date">
+			set${c.simpleJavaField?cap_first}(formater.parse(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}"))); <#if c.comments??>// ${c.comments}</#if>
+			<#elseif c.javaType == "byte[]">
+			set${c.simpleJavaField?cap_first}(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}").getBytes()); <#if c.comments??>// ${c.comments}</#if>
+			<#elseif c.javaType == "BigDecimal">
+			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(Long.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}")))); <#if c.comments??>// ${c.comments}</#if>
+			<#else>
+			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}"))); <#if c.comments??>// ${c.comments}</#if>
+			</#if>
+		}
+		</#list>
+	}
+
+
+	<#-- 生成get和set方法 -->
+
+	<#list table.columnList as c>
+		<#if c.comments??>
+	/**
+	 * 获取“${c.comments}”
+	 *
+	 * @return ${c.simpleJavaField}
+	 */
+		</#if>
+		<#if c.javaType=="java.util.Date">
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+		</#if>
+	public ${c.simpleJavaType} get${c.simpleJavaField?cap_first}() {
+		return ${c.simpleJavaField};
+	}
+
+		<#if c.comments??>
+	/**
+	 * 设置“${c.comments}”
+	 *
+	 * @param ${c.simpleJavaField}
+	 */
+		</#if>
+	public void set${c.simpleJavaField?cap_first}(${c.simpleJavaType} ${c.simpleJavaField}) {
+		this.${c.simpleJavaField} = ${c.simpleJavaField};
+		${c.simpleJavaField}Changed = true;
+	}
+	</#list>
+
+    /**
+	 * 对象结果输出字符串
+	 * @return
+	 * @throws Exception
+     */
+	public String entityToString(){
+	    StringBuilder sbSql=new StringBuilder();
+	    sbSql.append("this.class = " + this.toString() + AutoCodeConstants.LINEFEED);
+	    <#list table.columnList as c>
+	    <#if c.javaType=="java.util.Date">
+	    sbSql.append("${c.simpleJavaField} = " + DateUtils.formatDateTime(get${c.simpleJavaField?cap_first}()) + AutoCodeConstants.LINEFEED);  <#if c.comments??>// ${c.comments}</#if>
+	    </#if>
+	    <#if c.javaType!="java.util.Date">
+	    sbSql.append("${c.simpleJavaField} = " + get${c.simpleJavaField?cap_first}() + AutoCodeConstants.LINEFEED);  <#if c.comments??>// ${c.comments}</#if>
+	    </#if>
+        </#list>
+        return sbSql.toString();
+
+	}
+
+    /**
+     * 重置属性变化状态
+     * @param changeState
+     */
+	public void resetChangeState(Boolean changeState){
+        <#list table.columnList as c>
+        ${c.simpleJavaField}Changed = changeState; <#if c.comments??>// ${c.comments}</#if>
+        </#list>
+    }
+
+
+}]]>
+       </content>
+</template>

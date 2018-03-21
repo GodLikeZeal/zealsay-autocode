@@ -1,0 +1,165 @@
+#left, #right {
+	float: left;
+}
+
+/*************** 修改bootstrap的默认样式 ***************/
+.form-group {
+	margin: 0px;
+	padding: 0px;
+	height: 45px;
+}
+
+.control-label {
+	height: 30px;
+	line-height: 30px;
+	text-align: right;
+	margin-right: 0px;
+}
+
+.input-group {
+	margin: 0px
+}
+
+.col-xs-2 {
+	padding: 3px;
+	min-width: 120px;
+}
+
+.col-xs-3 {
+	padding: 3px;
+	min-width: 100px;
+}
+
+.col-xs-8 {
+	padding: 3px;
+}
+
+.col-xs-9 {
+	padding: 3px;
+}
+
+.col-sm-12 {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+.ztree {
+	margin: 0 0 0 0px;
+	padding: 0 0 10px 0px;
+}
+
+#container-fluid1 {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+.rowbtn {
+	text-align: right;
+	margin-top: 20px;
+	padding: 3px;
+}
+	table.dataTable thead th, table.dataTable thead td{border-bottom:1px solid #d2d2d2}
+	table.dataTable.no-footer{border-bottom:1px solid #d2d2d2}
+	.dataTables_info{ text-indent:10px;}
+	
+	
+	
+/*新增加*/
+	#myTab a{
+		text-decoration: none;
+	}
+	
+	.btn-primary2{
+		background-color:#3ea7f0; color:#FFFFFF;
+	}
+	
+	.btn-primary2.disabled{
+		background-color:#3ea7f0; color:#FFFFFF;
+	}
+	
+	.btn-primary2:hover{
+		background-color:#058be9; color:#FFFFFF;
+	}
+	
+	.btn-primary2:focus{
+		background-color:#058be9; color:#FFFFFF;
+	}
+	
+/*jqxgrid中button所在div样式*/
+.button-div{
+	text-align: center;	
+}
+
+/*jqx grid中修改按钮样式*/
+.jqxgrid-btn-edit-base {
+	margin: 3px;
+	background-color: #E8E8E8;
+	color: black;
+	border: 1px solid #C7C7C7;
+	border-width: 1px;
+	height: 23px;
+	width: 63px;
+}
+
+.jqxgrid-btn-edit-base:hover {
+	background-color: #2977f7;
+	border: 1px solid #C7C7C7;
+	color: white;
+}
+
+/*jqx grid中删除按钮样式*/
+.jqxgrid-btn-del-base {
+	margin: 3px;
+	background-color: #E8E8E8;
+	color: black;
+	border: 1px solid #C7C7C7;
+	border-width: 1px;
+	height: 23px;
+	width: 63px;
+}
+
+.jqxgrid-btn-del-base:hover {
+	background-color: #ff6666;
+	border: 1px solid #C7C7C7;
+	color: white;
+}
+
+/*列表上方保存按钮*/
+.button-save{
+	margin-left:5px;
+	background-color:#6699ff;
+}
+
+.button-save:FOCUS{
+	background-color:#6699ff;
+}
+
+.button-save:hover{
+	background-color:#0066ff;
+}
+/*列表上方添加按钮*/
+.button-add{
+	margin-left:5px;
+	background-color:#66cc66;
+}
+
+.button-add:FOCUS{
+	background-color:#66cc66;
+}
+
+.button-add:hover{
+	background-color:#339933;
+}
+
+/*列表上方删除按钮*/
+.button-delete{
+	background-color:#ff6666;
+}
+
+.button-delete:hover{
+	background-color:#ff0033;
+}
+
+.button-delete:FOCUS{
+	background-color:#ff6666;
+}

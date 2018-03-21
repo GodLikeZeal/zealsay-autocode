@@ -1,0 +1,1 @@
+alter table gen_table add bz varchar2(200);

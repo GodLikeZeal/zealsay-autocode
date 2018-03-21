@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <category>
+        <category value="ALL" desc="全部">
+            <template>class/entity.xml</template>
+            <template>class/dao.xml</template>
+            <template>class/service.xml</template>
+            <template>class/controller.xml</template>
+            <template>class/mapper.xml</template>
+        </category>
+    </category>
+</config>

@@ -1,0 +1,30 @@
+create or replace function split(p_list varchar2, p_sep varchar2 := ',')
+  return type_split
+  pipelined is
+  l_idx  pls_integer;
+  v_list varchar2(4000) := p_list;
+begin
+  if 1 < 0 then
+     --pipe row('-0');
+     return;
+  else
+
+    loop
+      l_idx := instr(v_list, p_sep);
+      if l_idx > 0 then
+        pipe row(substr(v_list, 1, l_idx - 1));
+        v_list := substr(v_list, l_idx + length(p_sep));
+      else
+        pipe row(v_list);
+        exit;
+      end if;
+    end loop;
+
+  end if;
+
+  return;
+end split;
+
+
+
+

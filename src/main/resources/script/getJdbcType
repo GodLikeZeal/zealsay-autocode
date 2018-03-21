@@ -1,0 +1,49 @@
+create or replace function getJDBCType(columnType varchar2,columnScale float,bljdbcType number)
+return varchar2
+is
+p_value varchar2(1000);
+p_javavalue varchar2(1000);
+begin
+      case  columnType
+        when 'VARCHAR2' then
+           p_value:='VARCHAR';
+           p_javavalue:='String';
+        when 'NVARCHAR2'then
+           p_value:='VARCHAR';
+           p_javavalue:='String';
+        when 'CHAR'then
+           p_value:='VARCHAR';
+           p_javavalue:='String';
+        when 'TIMESTAMP(6)' then
+            p_value:='TIMESTAMP';
+            p_javavalue:='Timestamp';
+        when 'TIMESTAMP' then
+            p_value:='TIMESTAMP';
+            p_javavalue:='Timestamp';
+        when 'BLOB' then
+            p_value:='BLOB';
+            p_javavalue:='byte[]';
+        when 'DATE' then
+            p_value:='DATE';
+            p_javavalue:='java.util.Date';
+        when 'INTEGER' then
+             p_value:='INTEGER';
+            p_javavalue:='LONG';
+        when 'NUMBER' then
+           if columnScale=0 or columnScale is null  then
+              p_value:='INTEGER';
+              p_javavalue:='Long';
+           else
+              p_value:='FLOAT';
+              p_javavalue:='Double';
+           end if;
+        else
+           p_value:=columnType;
+      end case;
+
+      if bljdbcType=1 then
+          return p_value;
+      else
+          return p_javavalue;
+      end if;
+end;

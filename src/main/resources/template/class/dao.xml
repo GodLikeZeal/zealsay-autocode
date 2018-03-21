@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+       <name>Model</name>
+       <filePath>src/main/java/${packageName}/${moduleName}/dao</filePath>
+       <fileName>${ClassName}Dao.java</fileName>
+       <content><![CDATA[
+/** 
+ * Copyright ® 2016-${currentYear} zeal  1332949188@qq.com.
+ * All right reserved. 
+ */
+package ${packageName}.${moduleName}.dao;
+
+import ${packageCommonName}.${baseDao};
+import ${packageName}.${moduleName}.entity.${ClassName}Entity;
+import ${packageCommonName}.structure.CommonDao;
+
+/**
+ * ${functionName}数据访问接口
+ * 
+ * @author ${functionAuthor}
+ * @date ${functionVersion}
+ */
+@${baseDao}
+public interface ${ClassName}Dao extends CommonDao<${ClassName}Entity> {
+
+}]]>
+       </content>
+</template>
