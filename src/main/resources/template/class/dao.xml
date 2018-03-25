@@ -10,7 +10,7 @@
  */
 package ${packageName}.${moduleName}.dao;
 
-import ${packageCommonName}.${baseDao};
+import ${packageCommonName}.annotation.${baseDao};
 import ${packageName}.${moduleName}.entity.${ClassName};
 import ${packageCommonName}.web.CommonDao;
 

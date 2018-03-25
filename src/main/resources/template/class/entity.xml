@@ -2,7 +2,7 @@
 <template>
        <name>Model</name>
        <filePath>src/main/java/${packageName}/${moduleName}/entity</filePath>
-       <fileName>${ClassName}Entity.java</fileName>
+       <fileName>${ClassName}.java</fileName>
        <content><![CDATA[
 /** 
  * Copyright ® 2016-${currentYear} zeal  zhangleifor@163.com.
@@ -21,7 +21,7 @@ import ${packageUtilsName}.CommonUtils;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.math.BigDecimal;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+
 
 
 
@@ -37,7 +37,6 @@ public class ${ClassName} extends AbstractCommonEntity<${ClassName}> {
 	<#-- 生成字段属性 -->
 	//属性字段
 	<#list table.columnList?sort_by(["simpleJavaField"]) as c>
-	<#if c.comments??>@ApiModelProperty(value = "${c.comments}")</#if>
 	private ${c.simpleJavaType} ${c.simpleJavaField}; <#if c.comments??>// ${c.comments}</#if>
 	</#list>
 
@@ -57,7 +56,7 @@ public class ${ClassName} extends AbstractCommonEntity<${ClassName}> {
 		super();
 	}
 
-	public ${ClassName}Entity(Map<String,String> allRequestParams)  throws Exception{
+	public ${ClassName}(Map<String,String> allRequestParams)  throws Exception{
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");//用于时间格式化
 
         if(CommonUtils.mapContainsKey(allRequestParams,"size")){
@@ -126,13 +125,13 @@ public class ${ClassName} extends AbstractCommonEntity<${ClassName}> {
      */
 	public String entityToString(){
 	    StringBuilder sbSql=new StringBuilder();
-	    sbSql.append("this.class = " + this.toString() + \r\n);
+	    sbSql.append("this.class = " + this.toString() + "\r\n");
 	    <#list table.columnList as c>
 	    <#if c.javaType=="java.util.Date">
-	    sbSql.append("${c.simpleJavaField} = " + DateUtils.formatDateTime(get${c.simpleJavaField?cap_first}()) + \r\n);  <#if c.comments??>// ${c.comments}</#if>
+	    sbSql.append("${c.simpleJavaField} = " + DateUtils.formatDateTime(get${c.simpleJavaField?cap_first}()) + "\r\n");  <#if c.comments??>// ${c.comments}</#if>
 	    </#if>
 	    <#if c.javaType!="java.util.Date">
-	    sbSql.append("${c.simpleJavaField} = " + get${c.simpleJavaField?cap_first}() + \r\n);  <#if c.comments??>// ${c.comments}</#if>
+	    sbSql.append("${c.simpleJavaField} = " + get${c.simpleJavaField?cap_first}() + "\r\n");  <#if c.comments??>// ${c.comments}</#if>
 	    </#if>
         </#list>
         return sbSql.toString();

@@ -166,8 +166,9 @@
         var name = $('#selectTable').val();
         var moduleName = $('#txtModuleName').val();
         var className = $('#txtClassName').val();
+        var projectName = $('#projectName').val();
         var createBy =$('#txtCreateBy').val();
-        urlPath += "?name=" + name + "&moduleName=" + moduleName + "&className=" + className+"&createBy="+encodeURIComponent(createBy);
+        urlPath += "?name=" + name + "&moduleName=" + moduleName + "&className=" + className+ "&projectName=" + projectName+"&createBy="+encodeURIComponent(createBy);
         $.ajax({
             url: urlPath,
             type: 'GET',

@@ -146,7 +146,7 @@ public class AutoCodeService {
         String className=MapUtils.FilterMapValue(map,"className");
         String createBy=MapUtils.FilterMapValue(map,"createBy");
 
-        model.put("packageName", "com.zeal."+projectName+".modules.");//工程包路径
+        model.put("packageName", "com.zeal.zealsay."+projectName+".modules");//工程包路径
         if(PropertiesUtils.getM_jdbcUserName().toUpperCase().equals("SDE")){
             model.put("packageName", ConstUtils.surveyPackageName);//工程包路径
         }
@@ -182,7 +182,7 @@ public class AutoCodeService {
 
         model.put("dbType","Mysql");
         model.put("table",table);
-        model.put("currentYear","2017");
+        model.put("currentYear","2018");
 
         for (XmlTemplate tpl : templateList){
             result.append(generateToFile(tpl, model, true, "E:\\\\AutoCode\\\\CustomService"));
