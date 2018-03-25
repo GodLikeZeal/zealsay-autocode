@@ -11,11 +11,22 @@
     <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 只要在对应的mapper配置文件中加入<cache />标签即可-->
 	<!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
 	 <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->
-	<!-- INSERT一条Article  -->
+
+<!--${ClassName}查询字段-->
+    <sql id="queryColumns">
+    <#list table.columnList as c>
+    <#if (c_has_next)>
+    t.${c.name} as ${c.javaField},
+    <#else>
+    t.${c.name} as ${c.javaField}
+    </#if>
+    </#list>
+    </sql>
+
 	<!-- INSERT一条${ClassName}  -->
      <#list table.columnList as c>
      <#if c.isPk == "1" >
-	<insert id="insert" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity" keyProperty="${c.javaFieldId}" useGeneratedKeys="true">
+	<insert id="insert" parameterType="${packageName}.${moduleName}.entity.${ClassName}">
      </#if>
 	</#list>
     	insert into ${table.name?lower_case}
@@ -41,8 +52,8 @@
     	</trim>
 	</insert>
 
-	<!-- ${ClassName} UPDATE -->
-	<update id="update" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+	<!-- 根据id来UPDATE ${ClassName}-->
+	<update id="update" parameterType="${packageName}.${moduleName}.entity.${ClassName}">
     	update ${table.name?lower_case}
     	 <trim prefix="set" suffixOverrides=",">
     <#assign updateField>
@@ -63,15 +74,37 @@ ${c.name} = ${"#"}{${c.javaFieldId}}
     		</#if>
     	</#list>
     </#assign>
-            </trim>
+      </trim>
     	where ${whereCondition}
     </update>
 
-	<!-- DELETE一条${ClassName}  -->
-	<delete id="delete" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+    <!-- 根据条件来伪删除${ClassName}  -->
+	<update id="del" parameterType="${packageName}.${moduleName}.entity.${ClassName}">
+		update ${table.name?lower_case} set is_del=${r'${DEL_FLAG_DEL}'}
+		<include refid="whereCause"></include>
+	</update>
+
+	<!-- 根据id来伪删除一条${ClassName}  -->
+    <update id="delById" parameterType="java.lang.String">
+    <#assign whereCondition>
+    	<#list table.columnList as c>
+    		<#if c.isPk == "1">
+${c.name} = ${"#"}{${c.javaFieldId}}
+    			<#break>
+    		</#if>
+    	</#list>
+    </#assign>
+		update ${table.name?lower_case} set is_del=${r'${DEL_FLAG_DEL}'}
+		where ${whereCondition}
+	</update>
+
+	<!-- 根据条件来DELETE${ClassName}  -->
+	<delete id="delete" parameterType="${packageName}.${moduleName}.entity.${ClassName}">
 		delete from ${table.name?lower_case} t
 		<include refid="whereCause"></include>
 	</delete>
+
+		<!-- 根据id来DELETE一条${ClassName}  -->
     <delete id="deleteById" parameterType="java.lang.String">
     <#assign whereCondition>
     	<#list table.columnList as c>
@@ -116,8 +149,9 @@ ${whereCondition}
 
     <!-- 根据ID来查找一条${ClassName} -->
     <select id="findById" parameterType="java.lang.String"
-			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
-		select * from ${table.name?lower_case}
+			resultType="${packageName}.${moduleName}.entity.${ClassName}">
+		select <include refid="queryColumns"></include>
+		from ${table.name?lower_case}
 		<#assign whereCondition>
     	<#list table.columnList as c>
     		<#if c.isPk == "1">
@@ -130,22 +164,23 @@ ${c.name} = ${"#"}{${c.javaFieldId}}
 	</select>
 
     <!-- 根据Class来查找${ClassName} -->
-	<select id="findByClass" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
-			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
-		select * from ${table.name?lower_case} t
+	<select id="findByClass" parameterType="${packageName}.${moduleName}.entity.${ClassName}"
+			resultType="${packageName}.${moduleName}.entity.${ClassName}">
+		select <include refid="queryColumns"></include>
+		from ${table.name?lower_case} t
 		<include refid="whereCause"></include>
 	</select>
 
 <!-- 根据Class来分页查询查找${ClassName} -->
-	<select id="findByClassPaginate" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
-			resultType="${packageName}.${moduleName}.entity.${ClassName}Entity">
+	<select id="findByClassPaginate" parameterType="${packageName}.${moduleName}.entity.${ClassName}"
+			resultType="${packageName}.${moduleName}.entity.${ClassName}">
 		select * from ${table.name?lower_case} t
 		<include refid="whereCause"></include>
 		order by ${"$"}{order} ${"$"}{sort} limit  ${"#"}{start},${"#"}{size}
 	</select>
 
 <!-- 根据Class来分页查询查找${ClassName}的分页总数量 -->
-	<select id="findByClassPaginateCount" parameterType="${packageName}.${moduleName}.entity.${ClassName}Entity"
+	<select id="findByClassPaginateCount" parameterType="${packageName}.${moduleName}.entity.${ClassName}"
 			resultType="long">
 		select count(1) from ${table.name?lower_case} t
 		<include refid="whereCause"></include>

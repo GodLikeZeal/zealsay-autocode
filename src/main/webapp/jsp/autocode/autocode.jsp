@@ -21,10 +21,10 @@
                         <tr style="height:10px"></tr>
                         <tr>
                             <td nowrap="true" width="80px">
-                                表名：
+                                数据库：
                             </td>
-                            <td width="50%" vertical-align="middle" colspan="3">
-                                <select id="selectTable" onchange="getColumns();" class="form-control text-danger"/>
+                            <td  colspan="3" width="50%" vertical-align="middle">
+                                <select  id="dataBaseName" onchange="getTables();" value="" class="form-control text-primary"/>
                             </td>
                             <td colspan="1" style="width:8px">&nbsp;</td>
                             <td nowrap="true"  width="80px">
@@ -37,10 +37,32 @@
                         <tr style="height: 10px;"></tr>
                         <tr>
                             <td nowrap="true"  width="80px">
+                                项目名称：
+                            </td>
+                            <td width="50%" colspan="3">
+                                <select type="text" id="projectName" value="" class="form-control text-info">
+                                    <option value="admin">admin</option>
+                                    <option value="sso">sso</option>
+                                    <option value="mc">mc</option>
+                                    <option value="daemon">daemon</option>
+                                </select>
+                            </td>
+                            <td colspan="1" style="width:8px">&nbsp;</td>
+                            <td nowrap="true"  width="80px">
                                 模块名：
                             </td>
                             <td width="50%" colspan="3">
                                 <input type="text" id="txtModuleName" value="" class="form-control text-success">
+                            </td>
+
+                        </tr>
+                        <tr style="height: 10px;"></tr>
+                        <tr>
+                            <td nowrap="true" width="80px">
+                                表名：
+                            </td>
+                            <td width="50%" vertical-align="middle" colspan="3">
+                                <select id="selectTable" onchange="getColumns();" class="form-control text-danger"/>
                             </td>
                             <td colspan="1" style="width:8px">&nbsp;</td>
                             <td nowrap="true"  width="80px">
@@ -57,20 +79,13 @@
                                 创建者：
                             </td>
                             <td width="50%" colspan="3"  vertical-align="middle">
-                                <input type="text" id="txtCreateBy" value="" class="form-control text-danger"/>
-                            </td>
-                            <td colspan="1" style="width:8px">&nbsp;</td>
-                            <td nowrap="true">
-                                数据库：
-                            </td>
-                            <td  colspan="3" width="50%" vertical-align="middle">
-                                <select  id="dataBaseName" onchange="getTables();" value="" class="form-control text-primary"/>
+                                <input type="text" id="txtCreateBy" value="zeal" class="form-control text-danger"/>
                             </td>
                             <td colspan="1" style="width:8px">&nbsp;</td>
                             <td nowrap="true">
                                 &nbsp;
                             </td>
-                            <td width="25%" vertical-align="middle" colspan="3">
+                            <td width="50%" vertical-align="middle" colspan="3">
                                 <table width="100%">
                                     <tr>
 

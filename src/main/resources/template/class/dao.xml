@@ -11,8 +11,8 @@
 package ${packageName}.${moduleName}.dao;
 
 import ${packageCommonName}.${baseDao};
-import ${packageName}.${moduleName}.entity.${ClassName}Entity;
-import ${packageCommonName}.structure.CommonDao;
+import ${packageName}.${moduleName}.entity.${ClassName};
+import ${packageCommonName}.web.CommonDao;
 
 /**
  * ${functionName}数据访问接口
@@ -21,7 +21,7 @@ import ${packageCommonName}.structure.CommonDao;
  * @date ${functionVersion}
  */
 @${baseDao}
-public interface ${ClassName}Dao extends CommonDao<${ClassName}Entity> {
+public interface ${ClassName}Dao extends CommonDao<${ClassName}> {
 
 }]]>
        </content>

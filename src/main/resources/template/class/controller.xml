@@ -5,16 +5,16 @@
        <fileName>${ClassName}Controller.java</fileName>
        <content><![CDATA[
 /** 
- * Copyright ® 2016-${currentYear} zeal  1332949188@qq.com.
+ * Copyright ® 2016-${currentYear} zeal  zhangleifor@163.com.
  * All right reserved. 
  */
 package ${packageName}.${moduleName}.controller;
 
 
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.zeal.shiyulin.common.Result;
+import com.zeal.shiyulin.common.entity.R;
 import ${packagePaginateName}.PaginateDataResponse;
-import ${packageName}.${moduleName}.entity.${ClassName}Entity;
+import ${packageName}.${moduleName}.entity.${ClassName};
 import ${packageName}.${moduleName}.service.${ClassName}Service;
 import ${packageExceptionName}.ExceptionUtils;
 import ${packageExceptionName}.ZealException;
@@ -47,10 +47,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "通过ID查找对象[对象]", response=${ClassName}Entity.class, notes = "通过ID查找对象")
     @RequestMapping(value="/findById/{id}",method = RequestMethod.GET)
-    public Result findById(@PathVariable String id,HttpServletRequest request,
+    public R findById(@PathVariable String id,HttpServletRequest request,
                                             HttpServletResponse response){
         try{
-            return new Result(${ClassName?uncap_first}Service.findById(id));
+            return new R(${ClassName?uncap_first}Service.findById(id));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);
@@ -65,10 +65,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "通过Class查找对象[List]", response=${ClassName}Entity.class, notes = "通过Class查找对象")
     @RequestMapping(value="/findByClass",method = RequestMethod.POST)
-    public Result findByClass(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,
+    public R findByClass(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,
                                             HttpServletRequest request,HttpServletResponse response){
         try{
-            return new Result(${ClassName?uncap_first}Service.findByClass(${ClassName?uncap_first}Entity));
+            return new R(${ClassName?uncap_first}Service.findByClass(${ClassName?uncap_first}Entity));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);
@@ -135,10 +135,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "新增记录[对象]", response=${ClassName}Entity.class, notes = "新增记录")
     @RequestMapping(value="/insert",method = RequestMethod.POST)
-    public Result insert(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
+    public R insert(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
                        HttpServletResponse response){
         try{
-              return  new Result(${ClassName?uncap_first}Service.insert(${ClassName?uncap_first}Entity));
+              return  new R(${ClassName?uncap_first}Service.insert(${ClassName?uncap_first}Entity));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);
@@ -153,10 +153,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "更新数据[对象]", response=${ClassName}Entity.class, notes = "更新数据")
     @RequestMapping(value="/update",method = RequestMethod.POST)
-    public Result update(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
+    public R update(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
                        HttpServletResponse response){
         try{
-            return new Result(${ClassName?uncap_first}Service.update(${ClassName?uncap_first}Entity));
+            return new R(${ClassName?uncap_first}Service.update(${ClassName?uncap_first}Entity));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);
@@ -171,10 +171,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "通过Class删除信息[int]", response=Integer.class, notes = "通过Class删除信息")
     @RequestMapping(value="/delete",method = RequestMethod.POST)
-    public Result delete(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
+    public R delete(@RequestBody ${ClassName}Entity ${ClassName?uncap_first}Entity,HttpServletRequest request,
                        HttpServletResponse response){
         try{
-             return new Result(${ClassName?uncap_first}Service.delete(${ClassName?uncap_first}Entity));
+             return new R(${ClassName?uncap_first}Service.delete(${ClassName?uncap_first}Entity));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);
@@ -189,10 +189,10 @@ public class ${ClassName}Controller {
      */
     @ApiOperation(value = "通过ID删除信息[int]", response=Integer.class, notes = "通过ID删除信息")
     @RequestMapping(value="/deleteById/{id}",method = RequestMethod.POST)
-    public Result deleteById(@PathVariable String id,HttpServletRequest request,
+    public R deleteById(@PathVariable String id,HttpServletRequest request,
                        HttpServletResponse response){
         try{
-            return new Result(${ClassName?uncap_first}Service.deleteById(id));
+            return new R(${ClassName?uncap_first}Service.deleteById(id));
         }
         catch(Exception er) {
             ExceptionUtils.LoadLog(er);

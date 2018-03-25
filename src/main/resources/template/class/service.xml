@@ -5,15 +5,15 @@
        <fileName>${ClassName}Service.java</fileName>
        <content><![CDATA[
 /** 
- * Copyright ® 2016-${currentYear} zeal  1332949188@qq.com.
+ * Copyright ® 2016-${currentYear} zeal  zhangleifor@163.com.
  * All right reserved. 
  */
 package ${packageName}.${moduleName}.service;
 
 import ${packageName}.${moduleName}.dao.${ClassName}Dao;
-import ${packageName}.${moduleName}.entity.${ClassName}Entity;
+import ${packageName}.${moduleName}.entity.${ClassName};
 import org.springframework.stereotype.Service;
-import ${packageCommonName}.structure.CommonService;
+import ${packageCommonName}.web.CommonService;
 
 
 /**
@@ -23,7 +23,7 @@ import ${packageCommonName}.structure.CommonService;
  * @date ${functionVersion}
  */
 @Service
-public class ${ClassName}Service extends CommonService<${ClassName}Dao,${ClassName}Entity> {
+public class ${ClassName}Service extends CommonService<${ClassName}Dao,${ClassName}> {
 
 }]]>
        </content>

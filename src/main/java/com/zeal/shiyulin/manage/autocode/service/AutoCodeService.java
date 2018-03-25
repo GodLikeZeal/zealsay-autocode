@@ -2,6 +2,7 @@ package com.zeal.shiyulin.manage.autocode.service;
 
 import com.zeal.shiyulin.common.mapper.JaxbMapper;
 import com.zeal.shiyulin.common.utils.*;
+import com.zeal.shiyulin.manage.Utils.ConvertUtils;
 import com.zeal.shiyulin.manage.Utils.MapUtils;
 import com.zeal.shiyulin.manage.autocode.entity.*;
 import com.zeal.shiyulin.paginate.PaginateDataResponse;
@@ -57,6 +58,13 @@ public class AutoCodeService {
 
     public List<XmlTableColumn> GetAllColumn(Map map) {
         //CreateTemplete(map);
+        List<XmlTableColumn>xmlTableColumnList = autoCodeDao.getAllColumns(map);
+        //遍历处理，将字段下划线处拼接成小驼峰法
+        if (xmlTableColumnList!=null && !xmlTableColumnList.isEmpty()){
+            for (XmlTableColumn xmlTableColumn:xmlTableColumnList){
+                xmlTableColumn.setJavaField(ConvertUtils.underlineToCamel2(xmlTableColumn.getJavaField()));
+            }
+        }
         return autoCodeDao.getAllColumns(map);
     }
 
@@ -134,10 +142,11 @@ public class AutoCodeService {
         table.setColumnList(autoCodeDao.getColumnClass(new XmlTableColumn(new XmlTable(table.getId()))));
 
         String modulesName= MapUtils.FilterMapValue(map,"moduleName");
+        String projectName= MapUtils.FilterMapValue(map,"projectName");
         String className=MapUtils.FilterMapValue(map,"className");
         String createBy=MapUtils.FilterMapValue(map,"createBy");
 
-        model.put("packageName", ConstUtils.packageName);//工程包路径
+        model.put("packageName", "com.zeal."+projectName+".modules.");//工程包路径
         if(PropertiesUtils.getM_jdbcUserName().toUpperCase().equals("SDE")){
             model.put("packageName", ConstUtils.surveyPackageName);//工程包路径
         }

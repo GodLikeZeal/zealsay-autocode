@@ -39,7 +39,7 @@ public class OrderProperties extends Properties {
 	}
 
 	/**
-	 * Convert a nibble to a hex character
+	 * ConvertUtils a nibble to a hex character
 	 *
 	 * @param nibble the nibble to convert.
 	 */
@@ -127,7 +127,7 @@ public class OrderProperties extends Properties {
 					String key = line.substring(keyStart, separatorIndex);
 					String value = (separatorIndex < len) ? line.substring(valueIndex, len) : "";
 
-					// Convert then store key and value
+					// ConvertUtils then store key and value
 					key = loadConvert(key);
 					value = loadConvert(value);
 					//memorize the property also with the whold string
