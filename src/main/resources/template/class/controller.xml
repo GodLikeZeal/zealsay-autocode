@@ -11,12 +11,9 @@
 package ${packageName}.${moduleName}.controller;
 
 
-import com.zeal.zealsay.common.entity.R;
-import ${packagePaginateName}.PaginateDataResponse;
+import com.zeal.zealsay.common.entity.Result;
 import ${packageName}.${moduleName}.entity.${ClassName};
 import ${packageName}.${moduleName}.service.${ClassName}Service;
-import ${packageExceptionName}.ExceptionUtils;
-import ${packageExceptionName}.ZealException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,15 +42,14 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/findById/{id}",method = RequestMethod.GET)
-    public R findById(@PathVariable String id,HttpServletRequest request,
+    public Result findById(@PathVariable String id,HttpServletRequest request,
                                             HttpServletResponse response){
         try{
-            return new R(${ClassName?uncap_first}Service.findById(id));
+            return new Result(${ClassName?uncap_first}Service.findById(id));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
     }
 
     /**
@@ -62,66 +58,18 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/findByClass",method = RequestMethod.POST)
-    public R findByClass(@RequestBody ${ClassName} ${ClassName?uncap_first},
+    public Result findByClass(@RequestBody ${ClassName} ${ClassName?uncap_first},
                                             HttpServletRequest request,HttpServletResponse response){
         try{
-            return new R(${ClassName?uncap_first}Service.findByClass(${ClassName?uncap_first}));
+            return new Result(${ClassName?uncap_first}Service.findByClass(${ClassName?uncap_first}));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
     }
 
-    /**
-     * 通过Class分页查找对象
-     * @author ${functionAuthor}
-     * @date ${functionVersion}
-     */
-    @RequestMapping(value="/findByClassWithPaginate",method = RequestMethod.POST)
-    public PaginateDataResponse findByClassWithPaginate(@RequestParam Map<String,String> allRequestParam,
-                                                        @RequestBody ${ClassName} ${ClassName?uncap_first},
-                                                        HttpServletRequest request, HttpServletResponse response){
 
-        try{
-            if(allRequestParam.containsKey("size")){
-                ${ClassName?uncap_first}.setSize(Integer.valueOf(allRequestParam.get("size")));
-            }
-            if(allRequestParam.containsKey("start")){
-                ${ClassName?uncap_first}.setStart(Integer.valueOf(allRequestParam.get("start")));
-            }
-            if(allRequestParam.containsKey("order")){
-                ${ClassName?uncap_first}.setOrder(String.valueOf(allRequestParam.get("order")));
-            }
-            if(allRequestParam.containsKey("sort")){
-                ${ClassName?uncap_first}.setSort(String.valueOf(allRequestParam.get("sort")));
-            }
-            return  ${ClassName?uncap_first}Service.listPage(${ClassName?uncap_first});
-        }
-        catch(Exception er){
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
-        }
-    }
 
-    /**
-     * 通过url参数查找分页对象
-     * @author ${functionAuthor}
-     * @date ${functionVersion}
-     */
-    @RequestMapping(value="/findByClassWithPaginate",method = RequestMethod.GET)
-    public PaginateDataResponse findByClassWithPaginate(@RequestParam Map<String,String> allRequestParam,
-                                                        HttpServletRequest request, HttpServletResponse response){
-
-        try{
-            ${ClassName} ${ClassName?uncap_first} = new ${ClassName}(allRequestParam);
-            return  ${ClassName?uncap_first}Service.listPage(${ClassName?uncap_first});
-        }
-        catch(Exception er){
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
-        }
-    }
 
     /**
      * 新增记录
@@ -129,15 +77,14 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/insert",method = RequestMethod.POST)
-    public R insert(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
+    public Result insert(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
                        HttpServletResponse response){
         try{
-              return  new R(${ClassName?uncap_first}Service.insert(${ClassName?uncap_first}));
+              return  new Result(${ClassName?uncap_first}Service.insert(${ClassName?uncap_first}));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
     }
 
     /**
@@ -146,15 +93,14 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/update",method = RequestMethod.POST)
-    public R update(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
+    public Result update(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
                        HttpServletResponse response){
         try{
-            return new R(${ClassName?uncap_first}Service.update(${ClassName?uncap_first}));
+            return new Result(${ClassName?uncap_first}Service.update(${ClassName?uncap_first}));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
     }
 
     /**
@@ -163,15 +109,15 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/delete",method = RequestMethod.POST)
-    public R delete(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
+    public Result delete(@RequestBody ${ClassName} ${ClassName?uncap_first},HttpServletRequest request,
                        HttpServletResponse response){
         try{
-             return new R(${ClassName?uncap_first}Service.delete(${ClassName?uncap_first}));
+             return new Result(${ClassName?uncap_first}Service.delete(${ClassName?uncap_first}));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
+
     }
 
     /**
@@ -180,15 +126,14 @@ public class ${ClassName}Controller {
      * @date ${functionVersion}
      */
     @RequestMapping(value="/deleteById/{id}",method = RequestMethod.POST)
-    public R deleteById(@PathVariable String id,HttpServletRequest request,
+    public Result deleteById(@PathVariable String id,HttpServletRequest request,
                        HttpServletResponse response){
         try{
-            return new R(${ClassName?uncap_first}Service.deleteById(id));
+            return new Result(${ClassName?uncap_first}Service.deleteById(id));
         }
         catch(Exception er) {
-            ExceptionUtils.LoadLog(er);
-            throw new ZealException("系统异常");
         }
+        return null;
     }
 }]]>
        </content>

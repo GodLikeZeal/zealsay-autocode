@@ -10,7 +10,7 @@ FROM
 		SELECT
 			t.TABLE_NAME AS NAME,
 			NULL AS comments,
-			REPLACE (t.TABLE_NAME, '_', '') AS CLASS_NAME,
+			t.TABLE_NAME as classname,
 			t.table_name,
 		  CASE WHEN EXISTS(SELECT id FROM gen_table WHERE name = t.TABLE_NAME) THEN '已生成' ELSE '未生成' END AS zt
 		FROM

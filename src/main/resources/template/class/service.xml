@@ -13,7 +13,7 @@ package ${packageName}.${moduleName}.service;
 import ${packageName}.${moduleName}.dao.${ClassName}Dao;
 import ${packageName}.${moduleName}.entity.${ClassName};
 import org.springframework.stereotype.Service;
-import ${packageCommonName}.web.CommonService;
+import ${packageCommonName}.web.BaseService;
 
 
 /**
@@ -23,7 +23,7 @@ import ${packageCommonName}.web.CommonService;
  * @date ${functionVersion}
  */
 @Service
-public class ${ClassName}Service extends CommonService<${ClassName}Dao,${ClassName}> {
+public class ${ClassName}Service extends BaseService<${ClassName}Dao,${ClassName}> {
 
 }]]>
        </content>

@@ -6,6 +6,7 @@ import com.zeal.shiyulin.manage.Utils.ConvertUtils;
 import com.zeal.shiyulin.manage.Utils.MapUtils;
 import com.zeal.shiyulin.manage.autocode.entity.*;
 import com.zeal.shiyulin.paginate.PaginateDataResponse;
+import com.zeal.shiyulin.utils.CamelUtils;
 import com.zeal.shiyulin.utils.ConstUtils;
 import com.google.common.collect.Lists;
 import com.zeal.shiyulin.manage.autocode.dao.AutoCodeDao;
@@ -53,7 +54,13 @@ public class AutoCodeService {
     }
 
     public List<XmlTable> GetAllTable(String dataBaseName) {
-        return autoCodeDao.getAllTable(dataBaseName);
+        List<XmlTable> xmlTableList = autoCodeDao.getAllTable(dataBaseName);
+        if (xmlTableList!=null && xmlTableList.size()>0){
+            for (XmlTable xmlTable:xmlTableList){
+                xmlTable.setClassName(CamelUtils.underline2Camel(xmlTable.getClassName(),false));
+            }
+        }
+        return xmlTableList;
     }
 
     public List<XmlTableColumn> GetAllColumn(Map map) {
@@ -146,7 +153,7 @@ public class AutoCodeService {
         String className=MapUtils.FilterMapValue(map,"className");
         String createBy=MapUtils.FilterMapValue(map,"createBy");
 
-        model.put("packageName", "com.zeal.zealsay."+projectName+".modules");//工程包路径
+        model.put("packageName", "com.zeal."+projectName+".modules");//工程包路径
         if(PropertiesUtils.getM_jdbcUserName().toUpperCase().equals("SDE")){
             model.put("packageName", ConstUtils.surveyPackageName);//工程包路径
         }

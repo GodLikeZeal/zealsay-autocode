@@ -12,7 +12,7 @@ package ${packageName}.${moduleName}.dao;
 
 import ${packageCommonName}.annotation.${baseDao};
 import ${packageName}.${moduleName}.entity.${ClassName};
-import ${packageCommonName}.web.CommonDao;
+import ${packageCommonName}.web.BaseDao;
 
 /**
  * ${functionName}数据访问接口
@@ -21,7 +21,7 @@ import ${packageCommonName}.web.CommonDao;
  * @date ${functionVersion}
  */
 @${baseDao}
-public interface ${ClassName}Dao extends CommonDao<${ClassName}> {
+public interface ${ClassName}Dao extends BaseDao<${ClassName}> {
 
 }]]>
        </content>

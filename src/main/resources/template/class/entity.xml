@@ -14,7 +14,7 @@ package ${packageName}.${moduleName}.entity;
 import ${i};
 </#list>
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.zeal.zealsay.common.web.AbstractCommonEntity;
+import com.zeal.zealsay.common.web.BaseEntity;
 import ${packageUtilsName}.DateUtils;
 import ${packageUtilsName}.CommonUtils;
 
@@ -31,7 +31,7 @@ import java.math.BigDecimal;
  * @author ${functionAuthor}
  * @date ${functionVersion}
  */
-public class ${ClassName} extends AbstractCommonEntity<${ClassName}> {
+public class ${ClassName} extends BaseEntity<${ClassName}> {
 	private static final long serialVersionUID = 1L;
 	protected int revision;
 	<#-- 生成字段属性 -->
@@ -58,19 +58,6 @@ public class ${ClassName} extends AbstractCommonEntity<${ClassName}> {
 
 	public ${ClassName}(Map<String,String> allRequestParams)  throws Exception{
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");//用于时间格式化
-
-        if(CommonUtils.mapContainsKey(allRequestParams,"size")){
-            setSize(Integer.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"size")));  //每页显示数量
-        }
-        if(CommonUtils.mapContainsKey(allRequestParams,"start")){
-            setStart(Integer.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"start"))); //每页显示起始序号
-        }
-        if(CommonUtils.mapContainsKey(allRequestParams,"order")){
-            setOrder(String.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"order"))); //排序字段
-        }
-        if(CommonUtils.mapContainsKey(allRequestParams,"sort")){
-           setSort(String.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"sort"))); //排序方式，desc或asc
-        }
 
 		<#list table.columnList as c>
 		if (CommonUtils.mapContainsKey(allRequestParams,"${c.simpleJavaField}")) {
