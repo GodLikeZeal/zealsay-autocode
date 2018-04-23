@@ -21,7 +21,7 @@ import ${packageUtilsName}.CommonUtils;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.math.BigDecimal;
-
+import lombok.Data;
 
 
 
@@ -31,20 +31,31 @@ import java.math.BigDecimal;
  * @author ${functionAuthor}
  * @date ${functionVersion}
  */
+@Data
 public class ${ClassName} extends BaseEntity<${ClassName}> {
 	private static final long serialVersionUID = 1L;
 	protected int revision;
 	<#-- 生成字段属性 -->
 	//属性字段
 	<#list table.columnList?sort_by(["simpleJavaField"]) as c>
-	private ${c.simpleJavaType} ${c.simpleJavaField}; <#if c.comments??>// ${c.comments}</#if>
+	<#if c.comments??>
+	/**
+	 *  ${c.comments}
+	 */
+	 </#if>
+	private ${c.simpleJavaType} ${c.simpleJavaField};
 	</#list>
 
 
 	<#-- 生成字段属性是否变化 -->
 	//属性字段是否变化
 	<#list table.columnList as c>
-	private Boolean ${c.simpleJavaField}Changed = false; <#if c.comments??>// ${c.comments}</#if>
+	<#if c.comments??>
+	/**
+	 *  ${c.comments}
+	 */
+	 </#if>
+	private Boolean ${c.simpleJavaField}Changed = false;
 	</#list>
 
 
@@ -62,48 +73,37 @@ public class ${ClassName} extends BaseEntity<${ClassName}> {
 		<#list table.columnList as c>
 		if (CommonUtils.mapContainsKey(allRequestParams,"${c.simpleJavaField}")) {
 			<#if c.javaType == "java.util.Date">
-			set${c.simpleJavaField?cap_first}(formater.parse(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}"))); <#if c.comments??>// ${c.comments}</#if>
+           <#if c.comments??>
+           /**
+            *  ${c.comments}
+            */
+            </#if>
+			set${c.simpleJavaField?cap_first}(formater.parse(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}")));
 			<#elseif c.javaType == "byte[]">
-			set${c.simpleJavaField?cap_first}(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}").getBytes()); <#if c.comments??>// ${c.comments}</#if>
+           <#if c.comments??>
+           /**
+            *  ${c.comments}
+            */
+            </#if>
+			set${c.simpleJavaField?cap_first}(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}").getBytes());
 			<#elseif c.javaType == "BigDecimal">
-			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(Long.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}")))); <#if c.comments??>// ${c.comments}</#if>
+			<#if c.comments??>
+           /**
+            *  ${c.comments}
+            */
+            </#if>
+			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(Long.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}"))));
 			<#else>
-			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}"))); <#if c.comments??>// ${c.comments}</#if>
+			<#if c.comments??>
+           /**
+            *  ${c.comments}
+            */
+            </#if>
+			set${c.simpleJavaField?cap_first}(${c.javaType}.valueOf(CommonUtils.getMapValueIgnoreCase(allRequestParams,"${c.simpleJavaField}")));
 			</#if>
 		}
 		</#list>
 	}
-
-
-	<#-- 生成get和set方法 -->
-
-	<#list table.columnList as c>
-		<#if c.comments??>
-	/**
-	 * 获取“${c.comments}”
-	 *
-	 * @return ${c.simpleJavaField}
-	 */
-		</#if>
-		<#if c.javaType=="java.util.Date">
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-		</#if>
-	public ${c.simpleJavaType} get${c.simpleJavaField?cap_first}() {
-		return ${c.simpleJavaField};
-	}
-
-		<#if c.comments??>
-	/**
-	 * 设置“${c.comments}”
-	 *
-	 * @param ${c.simpleJavaField}
-	 */
-		</#if>
-	public void set${c.simpleJavaField?cap_first}(${c.simpleJavaType} ${c.simpleJavaField}) {
-		this.${c.simpleJavaField} = ${c.simpleJavaField};
-		${c.simpleJavaField}Changed = true;
-	}
-	</#list>
 
     /**
 	 * 对象结果输出字符串
@@ -115,10 +115,16 @@ public class ${ClassName} extends BaseEntity<${ClassName}> {
 	    sbSql.append("this.class = " + this.toString() + "\r\n");
 	    <#list table.columnList as c>
 	    <#if c.javaType=="java.util.Date">
-	    sbSql.append("${c.simpleJavaField} = " + DateUtils.formatDateTime(get${c.simpleJavaField?cap_first}()) + "\r\n");  <#if c.comments??>// ${c.comments}</#if>
+	    <#if c.comments??>
+	    // ${c.comments}
+        </#if>
+	    sbSql.append("${c.simpleJavaField} = " + DateUtils.formatDateTime(get${c.simpleJavaField?cap_first}()) + "\r\n");
 	    </#if>
 	    <#if c.javaType!="java.util.Date">
-	    sbSql.append("${c.simpleJavaField} = " + get${c.simpleJavaField?cap_first}() + "\r\n");  <#if c.comments??>// ${c.comments}</#if>
+	    <#if c.comments??>
+	    // ${c.comments}
+        </#if>
+	    sbSql.append("${c.simpleJavaField} = " + get${c.simpleJavaField?cap_first}() + "\r\n");
 	    </#if>
         </#list>
         return sbSql.toString();
@@ -131,7 +137,12 @@ public class ${ClassName} extends BaseEntity<${ClassName}> {
      */
 	public void resetChangeState(Boolean changeState){
         <#list table.columnList as c>
-        ${c.simpleJavaField}Changed = changeState; <#if c.comments??>// ${c.comments}</#if>
+        <#if c.comments??>
+           /**
+            *  ${c.comments}
+            */
+            </#if>
+        ${c.simpleJavaField}Changed = changeState;
         </#list>
     }
 
