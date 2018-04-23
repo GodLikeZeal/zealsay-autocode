@@ -17,6 +17,7 @@ import ${packageName}.${moduleName}.service.${ClassName}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.zeal.zealsay.common.exception.ZealException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
@@ -48,8 +49,8 @@ public class ${ClassName}Controller {
             return new Result(${ClassName?uncap_first}Service.findById(id));
         }
         catch(Exception er) {
+            throw new ZealException("系统异常");
         }
-        return null;
     }
 
     /**
@@ -64,8 +65,8 @@ public class ${ClassName}Controller {
             return new Result(${ClassName?uncap_first}Service.findByClass(${ClassName?uncap_first}));
         }
         catch(Exception er) {
+            throw new ZealException("系统异常");
         }
-        return null;
     }
 
 
@@ -83,8 +84,8 @@ public class ${ClassName}Controller {
               return  new Result(${ClassName?uncap_first}Service.insert(${ClassName?uncap_first}));
         }
         catch(Exception er) {
+              throw new ZealException("系统异常");
         }
-        return null;
     }
 
     /**
@@ -99,8 +100,8 @@ public class ${ClassName}Controller {
             return new Result(${ClassName?uncap_first}Service.update(${ClassName?uncap_first}));
         }
         catch(Exception er) {
+            throw new ZealException("系统异常");
         }
-        return null;
     }
 
     /**
@@ -115,9 +116,8 @@ public class ${ClassName}Controller {
              return new Result(${ClassName?uncap_first}Service.delete(${ClassName?uncap_first}));
         }
         catch(Exception er) {
+             throw new ZealException("系统异常");
         }
-        return null;
-
     }
 
     /**
@@ -132,8 +132,8 @@ public class ${ClassName}Controller {
             return new Result(${ClassName?uncap_first}Service.deleteById(id));
         }
         catch(Exception er) {
+            throw new ZealException("系统异常");
         }
-        return null;
     }
 }]]>
        </content>
