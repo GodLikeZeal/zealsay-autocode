@@ -151,11 +151,11 @@ ${whereCondition}
     <select id="findById" parameterType="java.lang.String"
 			resultType="${packageName}.${moduleName}.entity.${ClassName}">
 		select <include refid="queryColumns"></include>
-		from ${table.name?lower_case}
+		from ${table.name?lower_case} t
 		<#assign whereCondition>
     	<#list table.columnList as c>
     		<#if c.isPk == "1">
-${c.name} = ${"#"}{${c.javaFieldId}}
+t.${c.name} = ${"#"}{${c.javaFieldId}}
     			<#break>
     		</#if>
     	</#list>
